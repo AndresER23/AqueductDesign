@@ -47,16 +47,22 @@ public class GrossEndowmentController {
 		newEndowment.setAqueduct(attachedAqueduct.get());
 		
 		
-		GrossEndowment savedEndowment = grossEndowmentServ.save(newEndowment);
-		
-		endowment.setAverageDailyFlow(savedEndowment.getAverageDailyFlow());
-		endowment.setMaximumDailyFlow(savedEndowment.getMaximumDailyFlow());
-		endowment.setMaximumHourlyFlow(savedEndowment.getMaximumHourlyFlow());
-		endowment.setTotalGrossEndowment(savedEndowment.getTotalGrossEndowment());
-				
-		
+		GrossEndowment savedEndowment;
+		try {
+			savedEndowment = grossEndowmentServ.save(newEndowment);
+			endowment.setAverageDailyFlow(savedEndowment.getAverageDailyFlow());
+			endowment.setMaximumDailyFlow(savedEndowment.getMaximumDailyFlow());
+			endowment.setMaximumHourlyFlow(savedEndowment.getMaximumHourlyFlow());
+			endowment.setTotalGrossEndowment(savedEndowment.getTotalGrossEndowment());
+		} catch (ArithmeticException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return ResponseEntity.ok(endowment);
-		
 	}
 	
 	@GetMapping

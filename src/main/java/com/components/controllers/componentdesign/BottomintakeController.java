@@ -45,7 +45,16 @@ public class BottomintakeController {
 		newBottomIntake.setSpacingBetweenBars(bottomIntake.getSpacingBetweenBars());
 		newBottomIntake.setSpeedBetweenBars(bottomIntake.getSpeedBetweenBars());
 		
-		BottomIntake savedBottomIntake= btmIntkImpl.save(newBottomIntake);
+		BottomIntake savedBottomIntake = null;
+		try {
+			savedBottomIntake = btmIntkImpl.save(newBottomIntake);
+		} catch (ArithmeticException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		bottomIntake.setIdBottomIntake(savedBottomIntake.getIdBottomIntake());
 		

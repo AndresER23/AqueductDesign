@@ -11,7 +11,9 @@ public interface GrossEndowmentService {
 
 	public Optional<GrossEndowment> findById(Long idEndowment);
 
-	public GrossEndowment save(GrossEndowment endowment) throws ArithmeticException;
+	public GrossEndowment save(GrossEndowment endowment) throws ArithmeticException, ClassNotFoundException;
 
 	public void delete(Long idEndowment);
+	
+	public Optional<GrossEndowment> findByAqueduct(Long idAquduct);
 }

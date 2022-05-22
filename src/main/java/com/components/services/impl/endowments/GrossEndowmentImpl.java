@@ -2,37 +2,27 @@ package com.components.services.impl.endowments;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.components.entities.endowment.GrossEndowment;
-import com.components.entities.projection.ArithmeticProjection;
-import com.components.entities.projection.ExponentialProjection;
-import com.components.entities.projection.GeometricProjection;
+import com.components.entities.projection.FinalProjection;
 import com.components.repositories.endowments.GrossEndowmentRepository;
 import com.components.services.interfaces.endowments.GrossEndowmentService;
-import com.components.services.interfaces.projections.ArithmeticService;
-import com.components.services.interfaces.projections.ExponentialService;
-import com.components.services.interfaces.projections.GeometricService;
+import com.components.services.interfaces.projections.FinalProjectionService;
 
 @Service
 public class GrossEndowmentImpl implements GrossEndowmentService {
 
 	private GrossEndowmentRepository grossEndowmentRepo;
 
-	private GeometricService geometricService;
-	private ArithmeticService arithmeticService;
-	private ExponentialService exponentialService;
+	private FinalProjectionService finProjectService;
 
-	public GrossEndowmentImpl(GrossEndowmentRepository grossEndowmentRepo, GeometricService geometricService,
-			ArithmeticService arithmeticService, ExponentialService exponentialService) {
+	public GrossEndowmentImpl(GrossEndowmentRepository grossEndowmentRepo, FinalProjectionService finProjectService  ) {
 		this.grossEndowmentRepo = grossEndowmentRepo;
-		this.geometricService = geometricService;
-		this.arithmeticService = arithmeticService;
-		this.exponentialService = exponentialService;
+		this.finProjectService = finProjectService;
 	}
 
 	@Override
@@ -46,7 +36,7 @@ public class GrossEndowmentImpl implements GrossEndowmentService {
 	}
 
 	@Override
-	public GrossEndowment save(GrossEndowment endowment) throws ArithmeticException {
+	public GrossEndowment save(GrossEndowment endowment) throws ArithmeticException, ClassNotFoundException {
 		
 		DecimalFormatSymbols decimalSymbols= new DecimalFormatSymbols();
 		decimalSymbols.setDecimalSeparator('.');
@@ -60,41 +50,13 @@ public class GrossEndowmentImpl implements GrossEndowmentService {
 		float grossEndowment = Float.parseFloat(decimalFormat.format(netEndowment / (1 - waterLosses)));
 
 		// CALCULATIONS FOR THE AVARAGE DAILY FLOW//
-		Optional<ArithmeticProjection> arithmeticProjection = arithmeticService
-				.findProjectionByIdAqueduct(endowment.getAqueduct().getIdAqueduct());
-
-		Optional<GeometricProjection> geometricProjection = geometricService
-				.findProjectionByIdAqueduct(endowment.getAqueduct().getIdAqueduct());
-
-		Optional<ExponentialProjection> exponentialProjection = exponentialService
-				.findProjectionByIdAqueduct(endowment.getAqueduct().getIdAqueduct());
-
-		int divider = 0;
-		int dividend = 0;
 		
-		List<Integer> projections= new ArrayList<>();
-		projections.add(
-				exponentialProjection.isPresent()
-				? exponentialProjection.get().getFinalPopulation() : 0);
-		projections.add(
-				geometricProjection.isPresent()
-				? geometricProjection.get().getPopulationFinal() : 0);
-		projections.add(
-				arithmeticProjection.isPresent()
-				? arithmeticProjection.get().getPopulationFinal() : 0);
-		
-		for(Integer p : projections) {
-			if (p != 0) {
-				dividend += p;
-				divider ++;
-			}
+		Optional<FinalProjection> finalProjection = finProjectService.findFinProjectionByAqueduct(endowment.getAqueduct().getIdAqueduct());
+		if (finalProjection.isEmpty()) {
+			throw new ClassNotFoundException("There isn't projections.");
 		}
-		
-		if (divider == 0 || dividend == 0) {
-			throw new ArithmeticException("there is something wrong in the calculation of the average daily flow, "
-					+ "the population average may be zero ");
-		}
-
+		float dividend = finalProjection.get().getFinalProjection();
+		float divider = finalProjection.get().getDivider();
 		float averagePopulation = dividend / divider;
 
 		// final valor of average daily flow
@@ -132,6 +94,10 @@ public class GrossEndowmentImpl implements GrossEndowmentService {
 	@Override
 	public void delete(Long idEndowment) {
 		grossEndowmentRepo.deleteById(idEndowment);
+	}
+	
+	public Optional<GrossEndowment> findByAqueduct(Long idAquduct){
+		return grossEndowmentRepo.findEndowmentByAqueduct(idAquduct);
 	}
 
 }

@@ -10,7 +10,7 @@ public interface BottomIntakeService {
 
 	public Optional<BottomIntake> findById(Long idBottomIntake);
 
-	public BottomIntake save(BottomIntake bottomIntake) throws ArithmeticException;
+	public BottomIntake save(BottomIntake bottomIntake) throws ArithmeticException, ClassNotFoundException;
 
 	public void delete(Long idBottomIntake);
 }
