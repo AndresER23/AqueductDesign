@@ -59,6 +59,16 @@ public class BottomIntake {
 	
 	@Column(name="design_flow")
 	private float designFlow;
+	
+	@Column(name="channel_slope")
+	private float channelSlope;
+	
+	@Column(name="wall_thickness")
+	private float wallThickness;
+	
+	@Column(name="free_edge")
+	private float freeEdge;
+	
 	@OneToOne
 	@JoinColumn(name="id_aqueduct")
 	AqueductDesign aqueduct;

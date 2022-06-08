@@ -19,5 +19,8 @@ public class BottomIntakeDTO {
 	private float heigthOfWaterSheet;
 	private float flowMultiplier;
 	private float designFlow;
+	private float wallThickness;
+	private float channelSlope;
+	private float freeEdge;
 	private Long idAttachedAqueduct;
 }

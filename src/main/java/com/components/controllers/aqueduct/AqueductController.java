@@ -55,7 +55,7 @@ public class AqueductController {
 		return ResponseEntity.ok(recoveredAqueduct.get());
 	}
 
-	@PutMapping("{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<AqueductDesign> update(@RequestBody AqueductDTO aqueduct,
 			@PathVariable(value = "id") Long aqueductId) {
 		Optional<AqueductDesign> preexistingAqueduct = aqueductImpl.findById(aqueductId);

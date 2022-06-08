@@ -13,19 +13,25 @@ import org.springframework.web.bind.annotation.RestController;
 import com.components.dtos.componentdesign.BottomIntakeDTO;
 import com.components.entities.aqueduct.AqueductDesign;
 import com.components.entities.componentdesign.BottomIntake;
-import com.components.services.impl.aqueduct.AqueductImpl;
-import com.components.services.impl.componentdesign.BottomIntakeImpl;
+import com.components.services.interfaces.aqueduct.AqueductService;
+import com.components.services.interfaces.componentdesign.BottomIntakeService;
 
 @RestController
 @RequestMapping("/bottomintake")
 public class BottomintakeController {
 	
-	private BottomIntakeImpl btmIntkImpl;
-	private AqueductImpl aqueductImpl;
+	private BottomIntakeService btmIntkService;
+	private AqueductService aqueductService;
+	
+	public BottomintakeController(BottomIntakeService btmIntkService, AqueductService aqueductService) {
+		this.btmIntkService = btmIntkService;
+		this.aqueductService = aqueductService;
+	}
+
 	@PostMapping
 	public ResponseEntity<BottomIntakeDTO> create(@RequestBody BottomIntakeDTO bottomIntake){
 		
-		Optional<AqueductDesign> attachedAqueduct= aqueductImpl.findById(bottomIntake.getIdAttachedAqueduct());
+		Optional<AqueductDesign> attachedAqueduct= aqueductService.findById(bottomIntake.getIdAttachedAqueduct());
 		
 		if (attachedAqueduct.isEmpty()) {
 			throw new EntityNotFoundException("There isn't attached aqueduct associated with the id provided in the path"
@@ -44,10 +50,13 @@ public class BottomintakeController {
 		newBottomIntake.setRiverWidth(bottomIntake.getRiverWidth());
 		newBottomIntake.setSpacingBetweenBars(bottomIntake.getSpacingBetweenBars());
 		newBottomIntake.setSpeedBetweenBars(bottomIntake.getSpeedBetweenBars());
+		newBottomIntake.setChannelSlope(bottomIntake.getChannelSlope());
+		newBottomIntake.setWallThickness(bottomIntake.getWallThickness());
+		newBottomIntake.setFreeEdge(bottomIntake.getFreeEdge());
 		
 		BottomIntake savedBottomIntake = null;
 		try {
-			savedBottomIntake = btmIntkImpl.save(newBottomIntake);
+			savedBottomIntake = btmIntkService.save(newBottomIntake);
 		} catch (ArithmeticException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
