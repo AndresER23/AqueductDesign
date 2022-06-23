@@ -2,15 +2,17 @@ package com.components.services.impl.componentdesign;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import org.hibernate.stat.SecondLevelCacheStatistics;
 import org.springframework.stereotype.Service;
 
 import com.components.entities.componentdesign.BottomIntake;
 import com.components.entities.endowment.GrossEndowment;
 import com.components.repositories.componentdesign.BottomIntakeRepository;
+import com.components.response.Response;
 import com.components.services.interfaces.componentdesign.BottomIntakeService;
 import com.components.services.interfaces.endowments.GrossEndowmentService;
 
@@ -36,11 +38,10 @@ public class BottomIntakeImpl implements BottomIntakeService {
 	}
 
 	@Override
-	public BottomIntake save(BottomIntake bottomIntake) throws ArithmeticException, ClassNotFoundException {
-		//Decimal format
-		DecimalFormatSymbols decimalSymbols= new DecimalFormatSymbols();
-		decimalSymbols.setDecimalSeparator('.');
-		DecimalFormat decimalFormat = new DecimalFormat("#.###" , decimalSymbols);
+	public Response save(BottomIntake bottomIntake) throws ArithmeticException, ClassNotFoundException {
+		
+		Response response  = new Response();
+		
 		
 		//Calculations for the design flow for the bottom intakes
 		Long idAqueduct = bottomIntake.getAqueduct().getIdAqueduct();
@@ -48,7 +49,7 @@ public class BottomIntakeImpl implements BottomIntakeService {
 				 grossEndowmentService.findByAqueduct(idAqueduct);
 		 
 		 if (finalEndowment.isEmpty()) {
-			throw new ClassNotFoundException("There is no projection related to the aqueduct with id:"
+			throw new ClassNotFoundException("There is no endowment related to the aqueduct with id:"
 					+ idAqueduct);
 		}
 		 
@@ -68,9 +69,7 @@ public class BottomIntakeImpl implements BottomIntakeService {
 		 
 		 float weirLength= bottomIntake.getDamWidth();
 		 float divider= (float) (1.84 * weirLength);
-		 float heigthWaterSheet = Float.parseFloat(
-				 decimalFormat.format(
-						 Math.pow((finalDesignFlow/divider), 0.6666666667))); 
+		 float heigthWaterSheet = formatNumber((Math.pow((finalDesignFlow/divider), 0.6666666667)));
 		 
 		 //Calculation for the correction of the length of the weir
 		 
@@ -79,37 +78,27 @@ public class BottomIntakeImpl implements BottomIntakeService {
 		 
 		 //Calculation to speed of the river over the dam
 		 
-		 float speedOverDam= Float.parseFloat(
-				 decimalFormat.format(
-						 finalDesignFlow/ (lengthCorrection*heigthWaterSheet)));
+		 float speedOverDam= formatNumber((finalDesignFlow/ (lengthCorrection*heigthWaterSheet)));
 		 
 		 //CALCULATIONS FOR THE GRID DESIGN
 		 
-		 float topEdgeReach  = Float.parseFloat(
-				 decimalFormat.format(
-						 (0.36*Math.pow(speedOverDam,0.6666666667)) 
-						 + (0.60*Math.pow(heigthWaterSheet, 0.5714285714))
-						 )
+		 float topEdgeReach  = formatNumber(
+				 ((0.36*Math.pow(speedOverDam,0.6666666667)) 
+						 + (0.60*Math.pow(heigthWaterSheet, 0.5714285714)))
 				 );
 				 
-		 float bottomEdgeReach = Float.parseFloat(
-				 decimalFormat.format(
-						 (0.18*Math.pow(speedOverDam, 0.5714285714))
-						 +(0.74*Math.pow(heigthWaterSheet, 0.75))
-						 )
+		 float bottomEdgeReach = formatNumber(
+						 ((0.18*Math.pow(speedOverDam, 0.5714285714))
+						 +(0.74*Math.pow(heigthWaterSheet, 0.75)))
 				 );
 				 
-		 float adductionCanalWidth = Float.parseFloat(
-				 decimalFormat.format(
+		 float adductionCanalWidth = formatNumber(
 						 (topEdgeReach + 0.10)
-						 )
 				 );
 				 
 		 	//first calculate to An
-		 float aN1 = Float.parseFloat(
-				 decimalFormat.format(
-						 finalDesignFlow/ (0.9 * bottomIntake.getSpeedBetweenBars())
-						 )
+		 float aN1 = formatNumber(
+				 (finalDesignFlow/ (0.9 * bottomIntake.getSpeedBetweenBars()))
 				 );
 		 
 		 float a= bottomIntake.getSpacingBetweenBars();
@@ -123,7 +112,18 @@ public class BottomIntakeImpl implements BottomIntakeService {
 		 	//Last recalculation for An
 		 float aN3= formatNumber((a*adductionCanalWidth*n));
 		 	//Calculation for speed between bars
-		 float vB1= this.formatNumber((finalDesignFlow/(0.9*aN3)));
+		 float vB= this.formatNumber((finalDesignFlow/(0.9*aN3)));
+		 
+		 if (vB < 0.15) {
+			 response.setMessage("the speed on the bars is less than that suggested in resolution 330 of 2017,"
+			 		+ " remember that the value of the speed on the bars must be between 0.15 and 0.20. "
+			 		+ "We recommend that you set other design values that allow you to fit into these figures ");
+			 
+			 response.setStatus(409);
+			 
+			 return response;
+			
+		}
 				 	
 		//CALCULATIONS FOR THE ADDUCTION CANAL
 		 
@@ -188,8 +188,38 @@ public class BottomIntakeImpl implements BottomIntakeService {
 		 	
 		 	float bChamber= formatNumber((xS + 0.30));
 		 			
+		//Response configuration
 		 	
-		return btmIntkRepo.save(bottomIntake);
+		 	Map<String,Float> designData = new HashMap<>();
+
+		 	designData.put("bChamber", bChamber);
+		 	designData.put("heigthWaterSheet", heigthWaterSheet);
+		 	designData.put("topEdgeReach" , topEdgeReach);
+		 	designData.put("bottomEdgeReach", bottomEdgeReach);
+		 	designData.put("adductionCanalWidth", adductionCanalWidth);
+		 	designData.put("LengthOfTheGrid", lR);
+		 	designData.put("numberOfHoles", n);	
+		 	designData.put("netArea", aN3);
+		 	designData.put("downStreamHeight", downStreamHeight);
+		 	designData.put("heightUpstream", heightUpstream);
+		 	designData.put("channelLength", lC);
+		 	designData.put("Ho", h0);
+		 	designData.put("He", hE);
+		 	designData.put("waterVelocityEndChannel 'Ve'", vE);
+		 	designData.put("CollectionChamberWidth", bChamber);
+		 	designData.put("XI", xI);
+		 	
+		 	
+		 	response.setMessage("OK");
+		 	response.setStatus(200);
+		 			
+		 	response.setResult(designData);
+		 	
+		 //Saving the initial data
+		 	
+		 	btmIntkRepo.save(bottomIntake);
+		 	
+		return response;
 	}
 
 	@Override

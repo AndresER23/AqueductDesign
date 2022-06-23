@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.components.dtos.componentdesign.BottomIntakeDTO;
 import com.components.entities.aqueduct.AqueductDesign;
 import com.components.entities.componentdesign.BottomIntake;
+import com.components.response.Response;
 import com.components.services.interfaces.aqueduct.AqueductService;
 import com.components.services.interfaces.componentdesign.BottomIntakeService;
 
@@ -29,7 +29,7 @@ public class BottomintakeController {
 	}
 
 	@PostMapping
-	public ResponseEntity<BottomIntakeDTO> create(@RequestBody BottomIntakeDTO bottomIntake){
+	public Response create(@RequestBody BottomIntakeDTO bottomIntake){
 		
 		Optional<AqueductDesign> attachedAqueduct= aqueductService.findById(bottomIntake.getIdAttachedAqueduct());
 		
@@ -54,19 +54,17 @@ public class BottomintakeController {
 		newBottomIntake.setWallThickness(bottomIntake.getWallThickness());
 		newBottomIntake.setFreeEdge(bottomIntake.getFreeEdge());
 		
-		BottomIntake savedBottomIntake = null;
-		try {
-			savedBottomIntake = btmIntkService.save(newBottomIntake);
-		} catch (ArithmeticException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Response savedBottomIntake = null;
 		
-		bottomIntake.setIdBottomIntake(savedBottomIntake.getIdBottomIntake());
+				try {
+					savedBottomIntake = btmIntkService.save(newBottomIntake);
+				} catch (ArithmeticException e) {
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
 		
-		return ResponseEntity.ok(bottomIntake);
+		return savedBottomIntake;
 	}
-}
+	}
+

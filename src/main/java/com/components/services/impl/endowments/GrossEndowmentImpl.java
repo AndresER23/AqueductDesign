@@ -84,9 +84,9 @@ public class GrossEndowmentImpl implements GrossEndowmentService {
 		// Assigning values to its attributes
 
 		endowment.setTotalGrossEndowment(grossEndowment);
-		endowment.setAverageDailyFlow(qmd);
-		endowment.setMaximumDailyFlow(QMD);
-		endowment.setMaximumHourlyFlow(QMH);
+		endowment.setAverageDailyFlow((qmd/1000));
+		endowment.setMaximumDailyFlow((QMD/1000));
+		endowment.setMaximumHourlyFlow((QMH/1000));
 
 		return grossEndowmentRepo.save(endowment);
 	}
