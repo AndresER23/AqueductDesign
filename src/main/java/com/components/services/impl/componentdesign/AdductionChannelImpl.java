@@ -2,8 +2,7 @@ package com.components.services.impl.componentdesign;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -18,12 +17,13 @@ import com.components.response.Response;
 import com.components.services.interfaces.componentdesign.AdductionChannelService;
 import com.components.services.interfaces.endowments.GrossEndowmentService;
 
+
 @Service
 public class AdductionChannelImpl implements AdductionChannelService {
 
 	private AdductionChannelRepository adductionChannelRepo;
 	private GrossEndowmentService grossEndowmentService;
-
+	
 	public AdductionChannelImpl(AdductionChannelRepository adductionChannelRepo,
 			GrossEndowmentService grossEndowmentService) {
 		this.adductionChannelRepo = adductionChannelRepo;
@@ -64,7 +64,7 @@ public class AdductionChannelImpl implements AdductionChannelService {
 			response.setMessage("There is not an endowment associated with the id of the aqueduct ");
 		}
 		float designflow = endowment.get().getAverageDailyFlow();
-
+		
 		// Calculations to find the adduction channel slope
 
 		float upperBound = adductionChannel.getUpperBound();
@@ -90,20 +90,19 @@ public class AdductionChannelImpl implements AdductionChannelService {
 			inchesPipeDiameter = 3;
 		} else if (convertPipeDiameter > 3 && convertPipeDiameter <= 4) {
 			inchesPipeDiameter = 4;
-		} else if (convertPipeDiameter > 4 && convertPipeDiameter <= 6) {
-			inchesPipeDiameter = 6;
-		} else if (convertPipeDiameter > 6 && convertPipeDiameter <= 8) {
-			inchesPipeDiameter = 8;
-		} else if (convertPipeDiameter > 8 && convertPipeDiameter <= 10) {
-			inchesPipeDiameter = 10;
-		} else if (convertPipeDiameter > 10 && convertPipeDiameter <= 12) {
-			inchesPipeDiameter = 12;
-		} else if (convertPipeDiameter > 12 && convertPipeDiameter <= 14) {
-			inchesPipeDiameter = 14;
-		} else if (convertPipeDiameter > 14 && convertPipeDiameter <= 16) {
-			inchesPipeDiameter = 16;
+		}else {
+			int beforeDiameter = 4;
+			for (int i = 0; i < 7 ; i++) {
+				if (convertPipeDiameter > beforeDiameter &&  convertPipeDiameter <= (beforeDiameter+2)) {
+					inchesPipeDiameter = (beforeDiameter+2);
+					break;
+				}
+				beforeDiameter+=2;
+			}
 		}
-
+		
+		float finalInchesPipeDiameter = inchesPipeDiameter;
+		
 		/*
 		 * For the following calculations, the dimensions of the pipe must be return to
 		 * meters
@@ -122,12 +121,21 @@ public class AdductionChannelImpl implements AdductionChannelService {
 		float velocityFullPipe = formatNumber((flowFullPipe / (Math.PI * Math.pow((metersPipeDiameter / 2), 2))));
 
 		float hydraulicRadius = formatNumber(
-				((Math.PI * Math.pow((metersPipeDiameter / 2), 2)) / Math.PI * metersPipeDiameter));
-
-		String flowFullPipeString = Float.toString(flowFullPipe);
-		char indice = flowFullPipeString.charAt(1);
-
-		return null;
+				((Math.PI * Math.pow((metersPipeDiameter / 2), 2)) / (Math.PI * metersPipeDiameter)));
+		
+		
+		Map<String,Float> responseMap = new HashMap<>();
+		responseMap.put("slope", slope);
+		responseMap.put("inchesPipeDiameter" , finalInchesPipeDiameter);
+		responseMap.put("flowFullPipe" , flowFullPipe);
+		responseMap.put("velocityFullPipe" , velocityFullPipe);
+		responseMap.put("hydraulicRadius" , hydraulicRadius);
+		
+		response.setResult(responseMap);
+		response.setMessage("OK");
+		response.setStatus(200);
+		
+		return response;
 	}
 
 	public Response delete(Long idAdductionChannel) {
@@ -148,46 +156,5 @@ public class AdductionChannelImpl implements AdductionChannelService {
 		return Float.parseFloat(decimalFormat.format(num));
 	}
 	
-	
 
-	public Map<String, Float> HydraulicRelationsCircularDucts(float number) {
-
-		float vVo;
-		float dD;
-		float rRo;
-
-		String convertedNumber = Float.toString(number);
-		char firstNumber = convertedNumber.charAt(2);
-		char secondNumber = convertedNumber.charAt(3);
-
-		ArrayList<Integer> indexY = new ArrayList<Integer>() {
-			{
-				for (int i = 0; i <= 9; i++) {
-					add(i);
-				}
-			}
-		};
-		
-		
-		ArrayList<Object> indexX = new ArrayList<Object>();
-		
-		indexX.add(1,new ArrayList<Object>() {
-			{
-				add(292);
-				add(92);
-				add(239);
-			}
-		});
-		indexX.add(2,new ArrayList<Object>() {
-			{
-				add(362);
-				add(124);
-				add(315);
-			}
-		});
-
-		return null;
-
-	}
-	
 }

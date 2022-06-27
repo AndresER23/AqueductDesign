@@ -1,7 +1,6 @@
 package com.components.services.interfaces.componentdesign;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.components.dtos.componentdesign.AdductionChannelDTO;
 import com.components.entities.componentdesign.AdductionChannel;

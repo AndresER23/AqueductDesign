@@ -8,11 +8,10 @@ import lombok.Setter;
 public class AdductionChannelDTO {
 	
 
-	public Long idAdductionChannel;
+	private Long idAdductionChannel;
 	private float adductionLength;
 	private float roughnessCoefficient;
 	private float upperBound;
 	private float lowerBound;
 	private long aqueductId;
-	
 }
