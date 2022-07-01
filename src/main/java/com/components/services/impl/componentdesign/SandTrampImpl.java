@@ -6,15 +6,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.components.dtos.componentdesign.SandTrapDTO;
 import com.components.entities.componentdesign.SandTrap;
 import com.components.entities.endowment.GrossEndowment;
 import com.components.repositories.componentdesign.SandTrapRepository;
 import com.components.response.Response;
-import com.components.services.interfaces.componentdesign.SandTrampService;
+import com.components.services.interfaces.componentdesign.SandTrapService;
 import com.components.services.interfaces.endowments.GrossEndowmentService;
 
-public class SandTrampImpl implements SandTrampService{
+@Service
+public class SandTrampImpl implements SandTrapService{
 	
 	private SandTrapRepository sandTrapRepo;
 	private GrossEndowmentService endowmentService;
@@ -86,7 +89,7 @@ public class SandTrampImpl implements SandTrampService{
 		
 		//1. Calculate the sedimentation velocity of the particle.
 		double vsp = 
-				((980*(2.65-1)*Math.pow(particleDiamter, 2)) / (18 * kinematicViscosity))
+				((980*(2.65-1)*Math.pow((particleDiamter/10), 2)) / (18 * kinematicViscosity))
 		;
 		
 		//2. Retrieve Hazen's number
@@ -105,7 +108,7 @@ public class SandTrampImpl implements SandTrampService{
 		
 		//5. Determine the volume of the sand trap.
 		
-		double volumeOftheSandTrap = hydraulicRetention * flowDesign;
+		double volumeOftheSandTrap = (hydraulicRetention*3600) * flowDesign;
 		
 		//6. Calculate the surface area of the sand trap.
 		
@@ -114,20 +117,20 @@ public class SandTrampImpl implements SandTrampService{
 		//7. Sand trap dimensions.
 		
 		double sandTrapwidth  = Math.sqrt((surfaceArea/sandTrapDimensions));
-		double sandTraplength = sandTrapDepth * sandTrapwidth;
+		double sandTraplength = sandTrapDimensions * sandTrapwidth;
 		
 		//8. Surface load of the sand trap.
 			
-		double surfaceLoad = (flowDesign / surfaceArea) * 86400;
+		double surfaceLoad = (flowDesign / surfaceArea);
 		
 		//9. Calculate particle sedimentation critique under theoretical conditions.
 		
 		double insideSquareRoot= (
-				(((18*kinematicViscosity) * (surfaceLoad*100))/ (980*(2.65 -1)))
+				((18*kinematicViscosity * (surfaceLoad*100))/ (980*(2.65 -1)))
 						);
 		double critiqueDiameter = Math.sqrt(insideSquareRoot);
 		
-		if ((critiqueDiameter*10) < 0.1) {
+		if ((critiqueDiameter*10) > 0.1) {
 			response.setMessage("The sand trap remove particules bigger than the allowed in the resolution, "
 					+ "change de design value for that the diametro de particulas that remove the desarenador this between the value allows ");
 			response.setStatus(500);
@@ -135,10 +138,10 @@ public class SandTrampImpl implements SandTrampService{
 		
 		//10. Determine the horizontal velocity and the maximum horizontal velocity.
 		
-		double horizontalVelocity  = ((surfaceLoad*100) * 100) / sandTrapDepth; 
+		double horizontalVelocity  = ((surfaceLoad*100) * (sandTraplength*100)) / sandTrapDepth; 
 		double maxHorizontalVelocity= 20 * vsp ;
 		
-		if (horizontalVelocity > maxHorizontalVelocity || horizontalVelocity > 0.25) {
+		if (horizontalVelocity > maxHorizontalVelocity || (horizontalVelocity/100)> 0.25) {
 			response.setMessage("The horizontal speed exceeds the maximum horizontal speed allowed in the resolution");
 			response.setStatus(500);
 		}

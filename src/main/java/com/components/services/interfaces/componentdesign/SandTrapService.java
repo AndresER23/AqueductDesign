@@ -1,13 +1,9 @@
 package com.components.services.interfaces.componentdesign;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.components.dtos.componentdesign.SandTrapDTO;
-import com.components.entities.componentdesign.SandTrap;
 import com.components.response.Response;
 
-public interface SandTrampService {
+public interface SandTrapService {
 	
 	public Response findAll();
 

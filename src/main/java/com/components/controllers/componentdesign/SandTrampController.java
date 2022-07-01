@@ -1,25 +1,28 @@
 package com.components.controllers.componentdesign;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.components.dtos.componentdesign.SandTrapDTO;
 import com.components.response.Response;
-import com.components.services.interfaces.componentdesign.SandTrampService;
+import com.components.services.interfaces.componentdesign.SandTrapService;
 
-@Controller
+@RestController
+@RequestMapping("/sandtrap")
 public class SandTrampController {
 	
-	private SandTrampService sandTrapServ;
-
-	public SandTrampController(SandTrampService sandTrapServ) {
+	private SandTrapService sandTrapServ;
+	
+	
+	public SandTrampController(SandTrapService sandTrapServ) {
 		this.sandTrapServ = sandTrapServ;
 	}
-	
+
 	@PostMapping
 	public Response save(@RequestBody SandTrapDTO sandTramp) {
 		Response response = new Response();
