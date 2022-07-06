@@ -1,0 +1,44 @@
+.card{
+    display: grid;
+    align-items: center;
+    align-content: center;
+    border-radius: 40px;
+    border: 1px solid #DADADA;
+    box-shadow: 0px 0px 10px -4px rgba(0,0,0,0.7);
+    margin: 20px 20px;
+}
+.cardActive{
+    box-shadow: 0px 0px 27px -3px rgba(128,193,217,1);
+    display: grid;
+    align-items: center;
+    align-content: center;
+    border-radius: 40px;
+    border: 1px solid #DADADA;
+    margin: 20px 20px;
+    cursor: pointer;
+}
+.cardheader{
+    text-align: center;
+}
+.cardheader h2{
+    padding-top: 10px;;
+}
+.cardbody{
+    color: black;
+    display: inline-block;
+    padding: 10px 16px;
+    text-align: left;
+}
+
+.cardbody image{
+    width: 100% !important;
+    min-width: 450px;
+}
+
+
+@media screen and (max-width: 540px) {
+    .cardtext{
+        display: flex;
+        flex-wrap: wrap;
+    }
+  }
