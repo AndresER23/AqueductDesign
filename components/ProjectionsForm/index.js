@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
+// Initializer functions
 const initialForm = {
   aqueductId: 0,
   populationLastCensus: 0,
@@ -14,19 +15,20 @@ const initialError = {
   status: false,
   message: "",
 };
-const ProjectionsForm = ({ setForm, propAqueductId }) => {
+
+//Main function
+
+const ProjectionsForm = ({
+  propAqueductId,
+  setProjection,
+  ProjectionModal,
+  setProjectionModal,
+}) => {
+  //States
   const [localForm, setLocalForm] = useState(initialForm);
   const [error, setError] = useState(initialError);
-  console.log(propAqueductId);
 
-  const handleChange = (e) => {
-    setLocalForm({
-      ...localForm,
-      [e.target.name]: e.target.value,
-    });
-  };
-  const url = "http://localhost:8080/projection/arithmetic";
-
+  //Adding the provicded id to the initial form
   useEffect(() => {
     setLocalForm({
       ...localForm,
@@ -34,9 +36,29 @@ const ProjectionsForm = ({ setForm, propAqueductId }) => {
     });
   }, []);
 
+
+  //URL
+  const url = "http://localhost:8080/projection/arithmetic";
+
+  //HANDLERS
+  //Setting the data of the form
+  const handleChange = (e) => {
+    setLocalForm({
+      ...localForm,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleCancel = () => {
+    setProjectionModal(false);
+  };
+
+  /*Verifying to see if the the data provided is correct 
+    and making a fetch request */
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    //Form control.
     if (localForm.finalTime < 25) {
       setError({
         message:
@@ -60,6 +82,7 @@ const ProjectionsForm = ({ setForm, propAqueductId }) => {
       return;
     }
 
+    //Setting the request head.
     const requestInit = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -68,11 +91,13 @@ const ProjectionsForm = ({ setForm, propAqueductId }) => {
 
     fetch(url, requestInit)
       .then((res) => res.json())
-      .then((res) => console.log(res));
+      .then((res)=> setProjection(res));
+      setProjectionModal(false)
   };
+
   return (
     <>
-      <Modal>
+      <Modal isOpen={ProjectionModal}>
         <ModalHeader>
           <h5>Periodo de diseño</h5>
         </ModalHeader>
@@ -86,11 +111,13 @@ const ProjectionsForm = ({ setForm, propAqueductId }) => {
                   población sea de 25 años.
                 </p>
               </div>
-              <div className="col">
+              <div className="col designPeriod">
+                <label htmlFor="finalTime">Año actual + periodo diseño</label>
                 <input
                   type="text"
                   placeholder="Periodo de diseño"
                   name="finalTime"
+                  id="finalTime"
                   onChange={handleChange}
                   required
                 ></input>
@@ -106,7 +133,7 @@ const ProjectionsForm = ({ setForm, propAqueductId }) => {
                 </p>
               </div>
               <div className="col">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="formprojection">
                   <label htmlFor="populationInitialCensus">
                     Poblacion inicial
                   </label>
@@ -116,6 +143,7 @@ const ProjectionsForm = ({ setForm, propAqueductId }) => {
                     placeholder="Población censo inicial"
                     name="populationInitialCensus"
                     onChange={handleChange}
+                    id="populationInitialCensus"
                     required
                   ></input>
                   <br></br>
@@ -127,6 +155,7 @@ const ProjectionsForm = ({ setForm, propAqueductId }) => {
                     placeholder="Población censo final"
                     name="populationLastCensus"
                     onChange={handleChange}
+                    id="populationLastCensus"
                     required
                   ></input>
                   <br></br>
@@ -140,6 +169,7 @@ const ProjectionsForm = ({ setForm, propAqueductId }) => {
                     placeholder="Año inicial"
                     name="yearInitialCensus"
                     onChange={handleChange}
+                    id="yearInitialCensus"
                     required
                   ></input>
                   <br></br>
@@ -151,26 +181,34 @@ const ProjectionsForm = ({ setForm, propAqueductId }) => {
                     placeholder="Año final"
                     name="yearLastCensus"
                     onChange={handleChange}
+                    id="yearLastCensus"
                     required
                   ></input>
                   <br></br>
-                  <input type="submit" className="btn btn-primary" />
+                  <ModalFooter>
+                    <button
+                      type="submit"
+                      className="btn buttonsave"
+                    >Guardar</button>
+                    <button
+                      type="reset"
+                      className="btn buttoncancel"
+                      onClick={handleCancel}
+                    >Atras</button>
+                  </ModalFooter>
                 </form>
               </div>
             </div>
           </div>
         </ModalBody>
-        <ModalFooter>
-          
-        </ModalFooter>
-      </Modal>
 
-      {error.status == true && (
+        {/* Conditional render */}
+        {error.status == true && (
         <div className="container">
           <div className="row"></div>
           <div className="col">
             <div className="alert alert-danger" role="alert">
-              {`Error: ${error.message} `}
+              {`Error: ${error.message}`}
 
               {setTimeout(() => {
                 setError({
@@ -181,6 +219,50 @@ const ProjectionsForm = ({ setForm, propAqueductId }) => {
           </div>
         </div>
       )}
+      </Modal>
+
+      <style jsx>{`
+        h5{
+          text-align: center;
+          color:#89BBFE;
+        }
+        input{
+          border-radius: 30px;
+          text-align: center;
+          border: 1px solid #89BBFE;
+          margin-bottom: 2px;
+        }
+
+        .designPeriod{
+          text-align:center;
+          margin-top:10%;
+        }
+
+        input:focus{
+          background:#DDE7F3;
+        }
+        .formprojection{
+          align-items: center;  
+          text-align:center;
+        }
+        .buttonsave{
+          width: 83px;
+          background:#B2EEBD;
+          border: none solid transparent !important;
+          padding: 5px;
+          border-radius: 25px;
+          margin-top: 10px;
+        }
+        .buttoncancel{
+          width: 83px;
+          background:#F98C8C;
+          border: none solid transparent !important;
+          padding: 5px;
+          border-radius: 25px;
+          margin-top: 10px;
+        }
+        
+      `}</style>
     </>
   );
 };

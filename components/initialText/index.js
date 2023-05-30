@@ -1,6 +1,6 @@
 import { colors } from "../../styles/theme";
 
-const InitialText = ({handleProp}) => {
+const InitialText = ({handleAqueductProp}) => {
     return (
         <>
         <p>
@@ -8,7 +8,7 @@ const InitialText = ({handleProp}) => {
         </p>
         <div className="container">
           <div className="row">
-            <button onClick={handleProp} className="btn btn-secondary">
+            <button onClick={handleAqueductProp} className="btn button">
               ¡Empezar!
             </button>
           </div>
@@ -26,6 +26,13 @@ const InitialText = ({handleProp}) => {
         button {
           border-radius: 40px;
           margin: 0 auto;
+          background: #615D6C;
+          color: white;
+        }
+        button:hover{
+          background:#5E5B64;
+          color:#DDE7F3;
+          border: 1px solid #CAE5FF;
         }
       `}</style>
       </>

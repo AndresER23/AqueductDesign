@@ -6,9 +6,14 @@ const initialForm = {
   aqueductName: "",
   idAqueduct: 0
 };
+
+const initialError = {
+  message: "",
+  status :"",
+}
 const ModalForm = ({ AqueductModal, setAqueductModal, setAqueduct }) => {
   const [form, setForm] = useState(initialForm);
-
+  const [error, setError] = useState(initialError);
   const url = "http://localhost:8080/desing";
 
   const handleChange = (e) => {
@@ -19,6 +24,15 @@ const ModalForm = ({ AqueductModal, setAqueductModal, setAqueduct }) => {
   };
 
   const handleSubmit = (e) => {
+    e.preventDefault()
+
+    if (form.aqueductName.length == 0) {
+      setError({
+        message: "El nombre del acueducto no puede estar vacio",
+        status: true,
+      })
+      return
+    }
     const requestInit = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -26,13 +40,26 @@ const ModalForm = ({ AqueductModal, setAqueductModal, setAqueduct }) => {
     };
     fetch(url, requestInit)
       .then((res) => res.json())
-      .then((res) => setAqueduct(res));
+      .then((res) => {
+        setAqueduct(res)
+        window.localStorage.setItem("aqueductName",JSON.stringify(res))
+      });
     setAqueductModal(false);
   };
 
   const handleCancel = () => {
     setAqueductModal(false);
   };
+    
+  const clearErrors = () => {
+    const showError = setTimeout(() => {
+      setError({
+        message: false,
+        status: false,
+      });
+      clearTimeout(showError)
+    }, 5000);
+  }
 
   return (
     <>
@@ -62,6 +89,18 @@ const ModalForm = ({ AqueductModal, setAqueductModal, setAqueduct }) => {
             </ModalFooter>
           </form>
         </ModalBody>
+         {/* Conditional render */}
+         {error.status == true && (
+                  <div className="container">
+                    <div className="row"></div>
+                    <div className="col">
+                      <div className="alert alert-danger" role="alert">
+                        {`Error: ${error.message}`}
+                        {clearErrors()}
+                      </div>
+                    </div>
+                  </div>
+                )}
       </Modal>
       <style jsx>{`
         .modalheader{

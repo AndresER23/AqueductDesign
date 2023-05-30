@@ -1,33 +1,30 @@
 import Image from "next/image";
 import styles from "../../styles/card.module.css";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 
-const Card = ({ src, title, children, dependency }) => {
+const Card = ({ src, title, children, dependency, result }) => {
   return (
     <>
-    <div className={`${ !dependency ? styles.card : styles.cardActive}`}>
-      <div className="container">
-        <div className="row">
-          <div className="col">
-            <div className={styles.cardheader}>
-              <h2>{title}</h2>
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-9 py-2">
-            <div className={styles.cardbody}>
-              <Image alt={title} src={src} width={200} height={200}  className="cardimage w-100"/>
-            </div>
-          </div>
-          <div className="col">
-            <div className={styles.cardbody}>
-              <p className="cardtext">{children}</p>
-            </div>
-          </div>
+      <div className={`${!dependency || result ? styles.card : styles.cardActive} card`}  style={{width:400, marginRight:10, marginLeft:10, marginBottom:20}}>
+        <Image
+          alt={title}
+          src={src}
+          width={300}
+          height={300}
+          className="mx-0"
+        />
+        <div className="card-body">
+          <h5 className="card-title">{title}</h5>
+          <p className="card-text">
+            {children}
+            {result && result}
+          </p>
         </div>
       </div>
-    </div>
+
+      <style jsx>{`
+
+      `}</style>
     </>
   );
 };

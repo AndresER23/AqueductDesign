@@ -2,7 +2,7 @@
   padding: 0 2rem;
 }
 .main{
-  font-family: 'Quicksand', sans-serif;;
+  font-family: 'Quicksand', sans-serif;
 }
 
 .footer {
@@ -29,5 +29,8 @@
   font-size: 1.1rem;
   font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
     Bitstream Vera Sans Mono, Courier New, monospace;
+
 }
+
+
 
