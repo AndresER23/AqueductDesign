@@ -113,7 +113,6 @@ export default function Home() {
     let dragForce = 9810 * designHydraulicRadius * slope;
     return (
       <div>
-        <p>{numberForSearch}</p>
         <p>
           Velocidad de diseño : <b>{desingVelocity} m/s</b>
         </p>
@@ -164,26 +163,26 @@ export default function Home() {
     return (
       <div className="results">
         <b>
-          <h5>Canal</h5>
+          <p>Canal</p>
         </b>
         <p>
           Altura de la lamina de agua : <b>{heigthWaterSheet.toFixed(3)}</b> m.
         </p>
         <p>
-          Ancho del canal de aducción <b>{adductionCanalWidth.toFixed(3)}</b>
+          Ancho del canal de aducción <b>{adductionCanalWidth.toFixed(3)}</b> m.
         </p>
         <p>
-          Longitud del canal : <b>{channelLength.toFixed(3)}</b>{" "}
+          Longitud del canal : <b>{channelLength.toFixed(3)}</b> m.
         </p>
 
         <b>
-          <h5>Rejilla</h5>
+          <p>Rejilla</p>
         </b>
         <p>
-          Longitud de la rejilla <b>{LengthOfTheGrid.toFixed(3)}</b>{" "}
+          Longitud de la rejilla <b>{LengthOfTheGrid.toFixed(3)}</b> m.
         </p>
         <p>
-          Numero de orificios: <b>{numberOfHoles.toFixed(3)}</b>{" "}
+          Numero de orificios: <b>{numberOfHoles.toFixed(3)}</b> m.
         </p>
       </div>
     );
@@ -425,21 +424,26 @@ export default function Home() {
         {`
           p {
             text-align: center;
-            margin-top: 30px;
             font-size: 19px;
           }
           p b {
             font-size: 20px;
             color: ${colors.primary};
           }
+          button{
+            margin-bottom: 20px;
+          }
           .components-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-around;
           }
+          .components-container > * {
+            margin: 15px 10px !important;
+          }
           .generate-report-div {
             display: flex;
-            justify-content: center;
+            justify-content: space-around;
           }
         `}
       </style>

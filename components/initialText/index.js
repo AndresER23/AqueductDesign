@@ -28,6 +28,7 @@ const InitialText = ({handleAqueductProp}) => {
           margin: 0 auto;
           background: #615D6C;
           color: white;
+          margin-bottom:30px;
         }
         button:hover{
           background:#5E5B64;

@@ -145,18 +145,18 @@ const PDF = ({ aqueduct, projections, endowment, bottomIntake, sandTrap}) => {
               <View style={styles.resultsColumn}>
                   <Text style={styles.subtitles}>Dimensiones</Text>
                   <Text style={styles.data}>Volumen : <Text style={styles.results}>{sandTrap.volumeOftheSandTrap.toFixed(3)} m³</Text>.</Text>
-                  <Text style={styles.data}>Ancho del desarenador : <Text style={styles.results}>{sandTrap.sandTrapwidth.toFixed(3)} m³</Text>.</Text>
-                  <Text style={styles.data}>Longitud del desarenador : <Text style={styles.results}>{sandTrap.sandTraplength.toFixed(3)} m³</Text>.</Text>
-                  <Text style={styles.data}>Área de superficie : <Text style={styles.results}>{sandTrap.surfaceArea.toFixed(3)} m³</Text>.</Text>
-                  <Text style={styles.data}>Carga superficial : <Text style={styles.results}>{sandTrap.surfaceLoad.toFixed(3)} m³</Text>.</Text>
+                  <Text style={styles.data}>Ancho del desarenador : <Text style={styles.results}>{sandTrap.sandTrapwidth.toFixed(3)} m</Text>.</Text>
+                  <Text style={styles.data}>Longitud del desarenador : <Text style={styles.results}>{sandTrap.sandTraplength.toFixed(3)} m</Text>.</Text>
+                  <Text style={styles.data}>Área superficial : <Text style={styles.results}>{sandTrap.surfaceArea.toFixed(3)} m2</Text>.</Text>
+                  <Text style={styles.data}>Carga superficial : <Text style={styles.results}>{sandTrap.surfaceLoad.toFixed(3)} m3/m2*s</Text>.</Text>
               </View>
               <View style={styles.resultsColumn}>
                 <Text style={styles.subtitles}>Especificaciones</Text>
-                <Text style={styles.data}>Velocidad de sedimentación : <Text style={styles.results}>{sandTrap.sedimentationVelocity.toFixed(3) }</Text>.</Text>
-                  <Text style={styles.data}>Retención hidraulica : <Text style={styles.results}>{sandTrap.hydraulicRetention.toFixed(3) }</Text>.</Text>
-                  <Text style={styles.data}>Velocidad de arrastre : <Text style={styles.results}>{sandTrap.dragVelocity.toFixed(3) }</Text>.</Text>
-                  <Text style={styles.data}>Diametro crítico : <Text style={styles.results}>{sandTrap.critiqueDiameter.toFixed(3) }</Text>.</Text>
-                  <Text style={styles.data}>Máxima velocidad horizontal : <Text style={styles.results}>{sandTrap.maxHorizontalVelocity.toFixed(3)} m³</Text>.</Text>
+                <Text style={styles.data}>Velocidad de sedimentación : <Text style={styles.results}>{sandTrap.sedimentationVelocity.toFixed(3) }  cm/s</Text>.</Text>
+                  <Text style={styles.data}>Retención hidraulica : <Text style={styles.results}>{sandTrap.hydraulicRetention.toFixed(3) } h</Text>.</Text>
+                  <Text style={styles.data}>Velocidad de arrastre : <Text style={styles.results}>{sandTrap.dragVelocity.toFixed(3) } cm/s</Text>.</Text>
+                  <Text style={styles.data}>Diametro crítico : <Text style={styles.results}>{sandTrap.critiqueDiameter.toFixed(3) } cm</Text>.</Text>
+                  <Text style={styles.data}>Máxima velocidad horizontal : <Text style={styles.results}>{sandTrap.maxHorizontalVelocity.toFixed(3)} cm/s</Text>.</Text>
               </View>
             </View>
           </View>
