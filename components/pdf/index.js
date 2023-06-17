@@ -108,10 +108,10 @@ const PDF = ({ aqueduct, projections, endowment, bottomIntake, sandTrap}) => {
               </View>
               <View style={styles.resultsColumn}>
                 <Text style={styles.subtitles}>Resultados</Text>
-                <Text style={styles.data}>Demanda bruta : <Text style={styles.results}>{endowment.totalGrossEndowment.toFixed(3)}</Text>.</Text>
-                <Text style={styles.data}>Caudal máximo diario : <Text style={styles.results}>{endowment.maximumDailyFlow.toFixed(3)}</Text>.</Text>
-                <Text style={styles.data}>Caudal medio diario : <Text style={styles.results}>{endowment.maximumHourlyFlow.toFixed(3)}</Text>.</Text>
-                <Text style={styles.data}>Caudal máximo horario : <Text style={styles.results}>{endowment.averageDailyFlow.toFixed(3)}</Text>.</Text>
+                <Text style={styles.data}>Demanda bruta : <Text style={styles.results}>{endowment.totalGrossEndowment.toFixed(3)} m3/S</Text>.</Text>
+                <Text style={styles.data}>Caudal máximo diario : <Text style={styles.results}>{endowment.maximumDailyFlow.toFixed(3)}m3/s</Text>.</Text>
+                <Text style={styles.data}>Caudal medio diario : <Text style={styles.results}>{endowment.maximumHourlyFlow.toFixed(3)} m3/s</Text>.</Text>
+                <Text style={styles.data}>Caudal máximo horario : <Text style={styles.results}>{endowment.averageDailyFlow.toFixed(3)} m3/s </Text>.</Text>
               </View>
             </View>
           </View>
@@ -123,15 +123,15 @@ const PDF = ({ aqueduct, projections, endowment, bottomIntake, sandTrap}) => {
             <View style={styles.rowData}>
               <View style={styles.resultsColumn}>
                   <Text style={styles.subtitles}>Canal</Text>
-                  <Text style={styles.data}>Ancho del canal de aducción : <Text style={styles.results}>{bottomIntake.adductionCanalWidth}</Text>.</Text>
-                  <Text style={styles.data}>Ancho del canal de aducción : <Text style={styles.results}>{bottomIntake.adductionCanalWidth}</Text>.</Text>
+                  <Text style={styles.data}>Ancho del canal de aducción : <Text style={styles.results}>{bottomIntake.adductionCanalWidth} m</Text>.</Text>
+                  <Text style={styles.data}>Ancho del canal de aducción : <Text style={styles.results}>{bottomIntake.adductionCanalWidth} m</Text>.</Text>
               </View>
               <View style={styles.resultsColumn}>
                 <Text style={styles.subtitles}>Rejilla</Text>
-                  <Text style={styles.data}>Longitud de la rejilla : <Text style={styles.results}>{bottomIntake.LengthOfTheGrid.toFixed(3)}</Text>.</Text>
+                  <Text style={styles.data}>Longitud de la rejilla : <Text style={styles.results}>{bottomIntake.LengthOfTheGrid.toFixed(3)} m</Text>.</Text>
                   <Text style={styles.data}>Numero de agujeros : <Text style={styles.results}>{bottomIntake.numberOfHoles.toFixed(3)}</Text>.</Text>
-                  <Text style={styles.data}>Velocidad entre barrotes : <Text style={styles.results}>{bottomIntake.speedBetweenBars.toFixed(3)}</Text>.</Text>
-                  <Text style={styles.data}>Velocidad sobre la presa : <Text style={styles.results}>{bottomIntake.speedOverDam.toFixed(3)}</Text>.</Text>
+                  <Text style={styles.data}>Velocidad entre barrotes : <Text style={styles.results}>{bottomIntake.speedBetweenBars.toFixed(3)} m/s</Text>.</Text>
+                  <Text style={styles.data}>Velocidad sobre la presa : <Text style={styles.results}>{bottomIntake.speedOverDam.toFixed(3)} m/s</Text>.</Text>
               </View>
             </View>
           </View>

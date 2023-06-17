@@ -112,10 +112,10 @@ const ProjectionsForm = ({
                 </p>
               </div>
               <div className="col designPeriod">
-                <label htmlFor="finalTime">Año actual + periodo diseño</label>
+                <label htmlFor="finalTime">Periodo diseño</label>
                 <input
                   type="text"
-                  placeholder="Periodo de diseño"
+                  placeholder="Año"
                   name="finalTime"
                   id="finalTime"
                   onChange={handleChange}
@@ -140,7 +140,7 @@ const ProjectionsForm = ({
                   <br></br>
                   <input
                     type="number"
-                    placeholder="Población censo inicial"
+                    placeholder="Habitantes"
                     name="populationInitialCensus"
                     onChange={handleChange}
                     id="populationInitialCensus"
@@ -152,7 +152,7 @@ const ProjectionsForm = ({
                   <br></br>
                   <input
                     type="number"
-                    placeholder="Población censo final"
+                    placeholder="Habitantes"
                     name="populationLastCensus"
                     onChange={handleChange}
                     id="populationLastCensus"
@@ -166,7 +166,7 @@ const ProjectionsForm = ({
                   <br></br>
                   <input
                     type="number"
-                    placeholder="Año inicial"
+                    placeholder="Años"
                     name="yearInitialCensus"
                     onChange={handleChange}
                     id="yearInitialCensus"
@@ -178,7 +178,7 @@ const ProjectionsForm = ({
                   <br></br>
                   <input
                     type="number"
-                    placeholder="Año final"
+                    placeholder="Años"
                     name="yearLastCensus"
                     onChange={handleChange}
                     id="yearLastCensus"

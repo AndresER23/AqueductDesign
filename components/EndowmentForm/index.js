@@ -144,7 +144,7 @@ const EndowmentForm = ({
                             <br></br>
                             <input
                               type="number"
-                              placeholder="Demanda neta"
+                              placeholder="L/HAB*DIA"
                               name="netEndowment"
                               onChange={handleChange}
                               required
@@ -152,12 +152,12 @@ const EndowmentForm = ({
                             <br></br>
 
                             <label htmlFor="waterLosses">
-                              <b>Porcentaje de perdidas de agua sin %</b>
+                              <b>Porcentaje de perdidas de agua, sin %</b>
                             </label>
                             <br></br>
                             <input
                               type="number"
-                              placeholder="Perdidas de agua"
+                              placeholder="%"
                               name="waterLosses"
                               onChange={handleChange}
                               required

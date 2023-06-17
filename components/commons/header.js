@@ -1,39 +1,43 @@
 import Image from "next/image";
-import {colors} from "../../styles/theme"
-const Header = ({ children, src}) => {
+import { colors } from "../../styles/theme";
+import Link from "next/link";
+const Header = ({ children, src }) => {
   return (
     <>
       <nav className="navbar navbar-light navbar">
-        <a className="navbar-brand" href="#">
-          <Image
-            src={src}
-            width="70"
-            height="50"
-            className="d-inline-block align-top image"
-            alt={children}
-          />
-          <p>
-          {children}
-          </p>
-        </a>
+        <Image
+          src={src}
+          width="70"
+          height="50"
+          className="d-inline-block align-top image"
+          alt={children}
+        />
+        <Link className="navbar-brand" href="/">
+            <p>{children}</p>
+        </Link>
       </nav>
       <style jsx>{`
-        a {
-          text-align:center;
+        nav {
+          text-align: center;
           width: 100%;
           color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
-        a p {
-          color:${colors.white};
-          font-size:25px;
+        p {
+          color: ${colors.white};
+          font-size: 25px;
           weight: 00px;
+          margin-bottom: 0px;
         }
-        .navbar{
-          background: #615D6C;
+        p {
+          margin-bottom: 0px;
         }
-
-        `}</style>
-
+        .navbar {
+          background: #615d6c;
+        }
+      `}</style>
     </>
   );
 };
